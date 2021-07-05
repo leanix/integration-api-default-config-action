@@ -1,0 +1,13 @@
+name: 'LeanIX Integration API Default Config Action'
+description: 'Provisions a default configuration into the Integration API of all regions.'
+inputs:
+  environment:
+    description: 'The cluster environment, e.g. test or prod'
+    required: true
+    default: 'test'
+  region:
+    description: 'The region defining the cluster to deploy to, e.g. westeurope or australiaeast. Leave empty to deploy to all regions.'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
