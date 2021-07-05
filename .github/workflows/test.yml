@@ -16,6 +16,7 @@ jobs:
     - name: Provision default config
       uses: ./
       with:
-        environment: 'TEST'
-        region: 'westeurope'
+        environment: 'prod'
+        #region: 'westeurope'
+        #system_user_key: 'integration-api-oauth-secret-test-svc-flow-2'
         

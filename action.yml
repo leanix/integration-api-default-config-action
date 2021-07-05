@@ -8,6 +8,9 @@ inputs:
   region:
     description: 'The region defining the cluster to deploy to, e.g. westeurope or australiaeast. Leave empty to deploy to all regions.'
     required: false
+  system_user_key:
+    description: "The key that the action uses to retrieve the SYSTEM user's secret from the regional Azure Key Vault."
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
