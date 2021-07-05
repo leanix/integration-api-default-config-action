@@ -6,16 +6,20 @@ jobs:
   test:
     name: test-${{ github.run_number }}
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
     - name: Get credentials
       uses: leanix/secrets-action@master
       with:
         secret-store-credentials: ${{ secrets.INJECTED_SECRET_STORE_CREDENTIALS }}
+
     - name: Provision default config
       uses: ./
       with:
+        external_id: 'cider-github-repo-connector'
         environment: 'prod'
         #region: 'westeurope'
         #system_user_key: 'integration-api-oauth-secret-test-svc-flow-2'

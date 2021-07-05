@@ -1,6 +1,13 @@
 name: 'LeanIX Integration API Default Config Action'
 description: 'Provisions a default configuration into the Integration API of all regions.'
 inputs:
+  external_id:
+    description: 'The externalId of the default configuration that this action upserts.'
+    required: true
+  default_config_file:
+    description: 'The location of the file that contains the default configuration that is used as the input for this action.'
+    required: true
+    default: 'integration-api-default-config.json'
   environment:
     description: 'The cluster environment, e.g. test or prod'
     required: true
@@ -8,7 +15,11 @@ inputs:
   region:
     description: 'The region defining the cluster to deploy to, e.g. westeurope or australiaeast. Leave empty to deploy to all regions.'
     required: false
-  system_user_key:
+  system_user_client_id:
+    description: "The client id of the SYSTEM user."
+    required: true
+    default: 'integration-api'
+  system_user_vault_key:
     description: "The key that the action uses to retrieve the SYSTEM user's secret from the regional Azure Key Vault."
     required: false
 runs:
