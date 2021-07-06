@@ -6,19 +6,19 @@ inputs:
     required: true
     default: 'integration-api-default-config.json'
   environment:
-    description: 'The cluster environment, e.g. test or prod'
+    description: 'The environment to provision to, e.g. test or prod'
     required: true
     default: 'test'
   region:
-    description: 'The region defining the cluster to deploy to, e.g. westeurope or australiaeast. Leave empty to deploy to all regions.'
+    description: 'The region to provision to, e.g. westeurope or australiaeast. Leave empty to provision to all regions.'
     required: false
   system_user_client_id:
     description: "The client id of the SYSTEM user."
     required: true
     default: 'integration-api'
   system_user_vault_key:
-    description: "The key that the action uses to retrieve the SYSTEM user's secret from the regional Azure Key Vault."
+    description: "The key that the action uses to retrieve the SYSTEM user's secret from the regional Azure Key Vault. This can be useful in test scenarios to use the secret of a dedicated test server."
     required: false
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://leanixacrpublic.azurecr.io/integration-api-default-config-action:latest'

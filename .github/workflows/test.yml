@@ -1,6 +1,6 @@
 name: test
 
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   test:
@@ -19,7 +19,8 @@ jobs:
     - name: Provision default config
       uses: ./
       with:
-        environment: 'prod'
-        #region: 'westeurope'
-        #system_user_key: 'integration-api-oauth-secret-test-svc-flow-2'
+        default_config_file: 'test/integration-api-default-config.json'
+        environment: 'test'
+        region: 'westeurope'
+        system_user_key: 'integration-api-oauth-secret-test-svc-flow-2'
         
