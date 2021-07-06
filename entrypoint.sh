@@ -12,6 +12,9 @@ REGION_IDS["horizon"]="horizon" # edge case
 
 # The file containing the default integration-api config from the calling repository
 NEW_CONFIG_LOCATION=/github/workspace/${INPUT_DEFAULT_CONFIG_FILE}
+echo "Reading provided default config file from '${NEW_CONFIG_LOCATION}'..."
+EXTERNAL_ID=$(cat ${NEW_CONFIG_LOCATION} | jq -r '.externalId')
+echo "Found provided default config with externalId='${EXTERNAL_ID}'"
 
 # The credentials of the Service Principal are set by the secrets-action
 if [[ -z $AZURE_CLIENT_ID ]]; then
@@ -56,7 +59,7 @@ for REGION in $REGIONS; do
   VAULT_SECRET_VALUE=$(az keyvault secret show --vault-name ${KEY_VAULT_NAME} --name ${VAULT_SECRET_KEY} | jq -r .value)
 
   echo "Fetching oauth token from ${REGION_ID}.leanix.net with client_id='${INPUT_SYSTEM_USER_CLIENT_ID}'..."
-  TOKEN=$(curl -s --request POST \
+  TOKEN=$(curl --silent --request POST \
     --url "https://${REGION_ID}.leanix.net/services/mtm/v1/oauth2/token" \
     --header 'content-type: application/x-www-form-urlencoded' \
     --header 'User-Agent: integration-api-default-config-action' \
@@ -64,31 +67,19 @@ for REGION in $REGIONS; do
     --data client_secret=${VAULT_SECRET_VALUE} \
     --data grant_type=client_credentials \
     | jq -r .'access_token')
-  
-  echo ${TOKEN:0:3}
 
-  echo "GET integration-api/v1/defaultConfigurations"
-  set -x
-  ALL=$(curl -s --request GET \
-    --url "https://${REGION_ID}.leanix.net/services/integration-api/v1/defaultConfigurations" \
+  echo "GET integration-api/v1/defaultConfigurations/${EXTERNAL_ID}"
+  REMOTE_CONFIG_STATUS_CODE=$(curl --write-out %{http_code} --silent --output /dev/null --request GET \
+    --url "https://${REGION_ID}.leanix.net/services/integration-api/v1/defaultConfigurations/${EXTERNAL_ID}" \
     --header "Authorization: Bearer ${TOKEN}" \
     --header 'User-Agent: integration-api-default-config-action' \
     --header 'Accept: application/json')
-  set +x
-
-  echo ${ALL:0:20}
   
-  echo "Parsing default configurations..."
-  CONFIG_FROM_REMOTE=$(echo $ALL | jq --arg ID "${INPUT_EXTERNAL_ID}" '.[] | select(.externalId==$ID)')
-  if [[ -z "${CONFIG_FROM_REMOTE}" ]]; then
-    echo "No remote config found by externalId='${INPUT_EXTERNAL_ID}'"
-    #TODO: add new config from file at $NEW_CONFIG_LOCATION to the $ALL array
+  if [[ "${REMOTE_CONFIG_STATUS_CODE}" -eq 200 ]] ; then
+    echo "Found remote config by externalId='${EXTERNAL_ID}'"
+    #TODO: PUT new config
   else
-    echo "Found remote config by externalId='${INPUT_EXTERNAL_ID}':"
-    echo "${CONFIG_FROM_REMOTE:0:100}"
-    echo "---[truncated]--------------------------------------------------------"
-    #TODO: replace config element in $ALL array with the one from the file at $NEW_CONFIG_LOCATION
+    echo "No remote config found by externalId='${EXTERNAL_ID}'"
+    #TODO: POST new config
   fi
-
-  #TODO: PUT $ALL array back to remote
 done

@@ -19,7 +19,6 @@ jobs:
     - name: Provision default config
       uses: ./
       with:
-        external_id: 'cider-github-repo-connector'
         environment: 'prod'
         #region: 'westeurope'
         #system_user_key: 'integration-api-oauth-secret-test-svc-flow-2'
