@@ -26,5 +26,4 @@ jobs:
     - name: Build and push docker image
       uses: leanix/release-docker-image-action@master
       with:
-        name: leanix/integration-api-default-config-action
         registry: acr-public
