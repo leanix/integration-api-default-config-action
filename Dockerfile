@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 
 # Update apt and install some prerequisites
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg ruby-dev build-essential jq gettext-base && \
+    apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg jq && \
     apt-get clean
 
 # Install azure-cli
