@@ -1,5 +1,5 @@
 {
-    "externalId": "cider-github-repo-connector",
+    "externalId": "cider-github-repo-connector-test",
     "config": {
       "connectorType": "github-connector",
       "connectorId": "github-connector",
