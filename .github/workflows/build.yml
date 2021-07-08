@@ -1,0 +1,30 @@
+name: build
+
+on: 
+  push:
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build-${{ github.run_number }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get credentials
+      uses: leanix/secrets-action@master
+      with:
+        secret-store-credentials: ${{ secrets.INJECTED_SECRET_STORE_CREDENTIALS }}
+
+    - name: Build and push docker image
+      id: build-image
+      uses: leanix/release-docker-image-action@master
+      with:
+        registry: acr-public
+
+    - name: Test
+      run: test/test.sh ${{ steps.build-image.outputs.tag }}
