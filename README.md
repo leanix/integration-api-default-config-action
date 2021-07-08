@@ -10,7 +10,7 @@ Use in advance the provided [leanix/secrets-action](https://github.com/leanix/se
 A simple provision step in the connector's workflow would look like this:
 ```yaml
 - name: Provision default config
-  uses: leanix/integration-api-default-config-action@master
+  uses: leanix/integration-api-default-config-action@main
   with:
     environment: 'prod'  
 ```
