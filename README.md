@@ -21,8 +21,6 @@ This reads the file `integration-api-default-config.json` from the root of your 
 |default_config_file|no|`integration-api-default-config.json`|The location of the file that contains the default configuration that is used as the input for this action.|
 |environment|yes|test|The environment to provision to, e.g. test or prod|
 |region|no|-|The region to provision to, e.g. westeurope or australiaeast. Leave empty to provision to all regions.|
-|system_user_client_id|no|integration-api|The client id of the SYSTEM user. Leave empty to use the SYSTEM user of the Integration-API.|
-|system_user_vault_key|no|-|The key that the action uses to retrieve the SYSTEM user's secret from the regional Azure Key Vault. This can be useful in test scenarios to use the secret of a dedicated test server.|
 
 ## Requires
 This action requires following GitHub actions in advance:
