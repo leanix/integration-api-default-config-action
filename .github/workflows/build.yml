@@ -2,11 +2,8 @@ name: build
 
 on: 
   push:
-    branches:
-      - main
     paths-ignore:
       - 'README.md'
-      - 'test/**'
   workflow_dispatch:
 
 jobs:
@@ -22,8 +19,12 @@ jobs:
       uses: leanix/secrets-action@master
       with:
         secret-store-credentials: ${{ secrets.INJECTED_SECRET_STORE_CREDENTIALS }}
-        
+
     - name: Build and push docker image
+      id: build-image
       uses: leanix/release-docker-image-action@master
       with:
         registry: acr-public
+
+    - name: Test
+      run: test/test.sh ${{ steps.build-image.outputs.tag }}
