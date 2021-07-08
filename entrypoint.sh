@@ -16,20 +16,6 @@ echo "Reading provided default config file from '${NEW_CONFIG_LOCATION}' ..."
 EXTERNAL_ID=$(cat ${NEW_CONFIG_LOCATION} | jq -r '.externalId')
 echo "Found provided default config with externalId='${EXTERNAL_ID}'"
 
-# The credentials of the Service Principal are set by the secrets-action
-if [[ -z $AZURE_CLIENT_ID ]]; then
-  export AZURE_CLIENT_ID=$ARM_CLIENT_ID
-fi
-if [[ -z $AZURE_CLIENT_SECRET ]]; then
-  export AZURE_CLIENT_SECRET=$ARM_CLIENT_SECRET
-fi
-if [[ -z $AZURE_TENANT_ID ]]; then
-  export AZURE_TENANT_ID=$ARM_TENANT_ID
-fi
-if [[ -z $AZURE_SUBSCRIPTION_ID ]]; then
-  export AZURE_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
-fi
-
 echo "Login to Azure ..."
 az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
 az account set -s $ARM_SUBSCRIPTION_ID
