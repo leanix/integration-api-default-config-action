@@ -72,9 +72,35 @@ for REGION in $REGIONS; do
   
   if [[ "${REMOTE_CONFIG_STATUS_CODE}" -eq 200 ]] ; then
     echo "Found remote config by externalId='${EXTERNAL_ID}'"
-    #TODO: PUT new config
+    UPSERT_RESULT=$(curl --write-out %{http_code} --silent --output /dev/null --request PUT \
+    --url "https://${REGION_ID}.leanix.net/services/integration-api/v1/defaultConfigurations/${EXTERNAL_ID}" \
+    --header "Authorization: Bearer ${TOKEN}" \
+    --header 'User-Agent: integration-api-default-config-action' \
+    --header 'Accept: application/json' \
+    --header "Content-Type: application/json" \
+    --data-binary @${NEW_CONFIG_LOCATION})
+
+     if [[ "${UPSERT_RESULT}" -eq 200 ]] ; then
+      echo "Successfully updated default config with externalId='${EXTERNAL_ID}'"
+    else
+      echo "Failed to update default config. externalId='${EXTERNAL_ID}' http-code='${UPSERT_RESULT}'"
+      exit 1
+    fi
   else
     echo "No remote config found by externalId='${EXTERNAL_ID}'"
-    #TODO: POST new config
+    UPSERT_RESULT=$(curl --write-out %{http_code} --silent --output /dev/null --request POST \
+    --url "https://${REGION_ID}.leanix.net/services/integration-api/v1/defaultConfigurations" \
+    --header "Authorization: Bearer ${TOKEN}" \
+    --header 'User-Agent: integration-api-default-config-action' \
+    --header 'Accept: application/json' \
+    --header "Content-Type: application/json" \
+    --data-binary @${NEW_CONFIG_LOCATION})
+
+     if [[ "${UPSERT_RESULT}" -eq 200 ]] ; then
+      echo "Successfully created default config with externalId='${EXTERNAL_ID}'"
+    else
+      echo "Failed to create default config. externalId='${EXTERNAL_ID}' http-code='${UPSERT_RESULT}'"
+      exit 1
+    fi
   fi
 done
