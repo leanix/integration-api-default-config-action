@@ -8,6 +8,7 @@ REGION_IDS["eastus"]="us"
 REGION_IDS["canadacentral"]="ca"
 REGION_IDS["australiaeast"]="au"
 REGION_IDS["germanywestcentral"]="de"
+REGION_IDS["switzerlandnorth"]="ch"
 REGION_IDS["horizon"]="horizon" # edge-case for horizon
 
 # The file containing the default integration-api config from the calling repository
